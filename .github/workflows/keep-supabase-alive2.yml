@@ -15,10 +15,10 @@ jobs:
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
-      - name: Ping Supabase
+      - name: Ping Supabase (continue on failure)
         run: |
           echo "Pinging https://vxzyzxlubbkirjqpepfh.supabase.co..."
-          curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" https://vxzyzxlubbkirjqpepfh.supabase.co
+          curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" https://vxzyzxlubbkirjqpepfh.supabase.co || echo "Ping failed, but continuing..."
 
       - name: Create or update last-ping.txt with unique content
         run: |
@@ -27,4 +27,5 @@ jobs:
           git config --global user.name "GitHub Actions"
           git add last-ping.txt
           git commit -m "chore: update keep-alive timestamp [skip ci]" || echo "No changes to commit"
+          git pull origin main  # 👈 This fixes the "fetch first" error
           git push origin main
