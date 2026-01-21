@@ -13,16 +13,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Ping Supabase
         run: |
           echo "Pinging https://vxzyzxlubbkirjqpepfh.supabase.co..."
           curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" https://vxzyzxlubbkirjqpepfh.supabase.co
 
-      - name: Create or update last-ping.txt with unique timestamp
+      - name: Create or update last-ping.txt with unique content
         run: |
-          echo "Last keep-alive: $(date -u)" > last-ping.txt
+          echo "Last keep-alive: $(date -u) - Run ID: $GITHUB_RUN_ID" > last-ping.txt
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
           git add last-ping.txt
